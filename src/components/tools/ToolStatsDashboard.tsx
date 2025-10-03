@@ -39,7 +39,7 @@ const ToolStatsDashboard: React.FC<ToolStatsDashboardProps> = ({
       case 'in-use': return 'text-blue-600 bg-blue-100';
       case 'maintenance': return 'text-yellow-600 bg-yellow-100';
       case 'retired': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+      default: return 'text-muted-foreground bg-muted';
     }
   };
 
@@ -133,7 +133,7 @@ const ToolStatsDashboard: React.FC<ToolStatsDashboardProps> = ({
               <div key={category} className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">{category}</span>
                 <div className="flex items-center">
-                  <div className="w-24 bg-gray-200 rounded-full h-2 mr-2">
+                  <div className="w-24 bg-muted rounded-full h-2 mr-2">
                     <div 
                       className="bg-blue-600 h-2 rounded-full" 
                       style={{ width: `${(count / tools.length) * 100}%` }}
@@ -155,23 +155,23 @@ const ToolStatsDashboard: React.FC<ToolStatsDashboardProps> = ({
           </h3>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+              <thead className="bg-table-header">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-table-header-foreground uppercase tracking-wider">
                     Tool
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-table-header-foreground uppercase tracking-wider">
                     Category
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-table-header-foreground uppercase tracking-wider">
                     Warranty Date
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-table-header-foreground uppercase tracking-wider">
                     Days Left
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="bg-card divide-y divide-border">
                 {warrantyExpiring.slice(0, 5).map((tool) => {
                   const daysLeft = Math.ceil(
                     (new Date(tool.warrantyDate).getTime() - new Date().getTime()) / 
@@ -221,7 +221,7 @@ const ToolStatsDashboard: React.FC<ToolStatsDashboardProps> = ({
             .sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime())
             .slice(0, 5)
             .map((tool) => (
-              <div key={tool.toolID} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div key={tool.toolID} className="flex items-center justify-between p-3 bg-muted rounded-lg">
                 <div>
                   <p className="text-sm font-medium text-gray-900">{tool.name}</p>
                   <p className="text-xs text-gray-500">{tool.category} • {tool.supplier}</p>

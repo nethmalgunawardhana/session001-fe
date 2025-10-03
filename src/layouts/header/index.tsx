@@ -9,7 +9,7 @@ export function Header() {
         <input
           type="search"
           placeholder="Search"
-          className="bg-gray-100 border border-gray-300 pl-10 rounded-lg h-10 w-full text-sm text-gray-700 focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
+          className="bg-card border border-border pl-10 rounded-lg h-10 w-full text-sm text-card-foreground focus:ring-indigo-500 focus:border-indigo-500 focus:outline-none"
         />
       </div>
       <ThemeToggle />

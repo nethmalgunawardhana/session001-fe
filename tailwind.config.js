@@ -21,18 +21,18 @@ module.exports = {
 
     extend: {
       colors: {
-        theme: "#4C1D95", //Purple-900
-        theme50: "#FAF5FF ",
-        theme100: "#F3E8FF",
-        theme200: "#E9D5FF",
-        theme300: "#D8B4FE",
-        theme400: "#C084FC",
-        theme500: "#A855F7",
-        theme600: "#9333EA",
-        theme700: "#7E22CE",
-        theme800: "#6B21A8",
-        theme900: "#4C1D95",
-        theme950: "#2E1065",
+        theme: "#3b82f6", //Blue-500
+        theme50: "#eff6ff",
+        theme100: "#dbeafe",
+        theme200: "#bfdbfe",
+        theme300: "#93c5fd",
+        theme400: "#60a5fa",
+        theme500: "#3b82f6",
+        theme600: "#2563eb",
+        theme700: "#1d4ed8",
+        theme800: "#1e40af",
+        theme900: "#1e3a8a",
+        theme950: "#172554",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -65,6 +65,10 @@ module.exports = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        "table-header": {
+          DEFAULT: "hsl(var(--table-header))",
+          foreground: "hsl(var(--table-header-foreground))",
         },
         active: {
           DEFAULT: "hsl(var(--active))",

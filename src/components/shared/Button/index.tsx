@@ -32,7 +32,7 @@ export const Button: React.FC<IButtonProps> = ({
         };
       case "secondary":
         return {
-          bg: "py-2 md:py-2 px-4 bg-white border border-theme text-theme",
+          bg: "py-2 md:py-2 px-4 bg-card border border-primary text-primary",
         };
 
       case "small":

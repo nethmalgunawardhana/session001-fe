@@ -82,8 +82,8 @@ const ToolMovements: React.FC<ToolMovementsProps> = ({ tool }) => {
       case 'check-in': return 'bg-green-100 text-green-800';
       case 'maintenance': return 'bg-yellow-100 text-yellow-800';
       case 'repair': return 'bg-red-100 text-red-800';
-      case 'location-change': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'location-change': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
@@ -95,10 +95,10 @@ const ToolMovements: React.FC<ToolMovementsProps> = ({ tool }) => {
     return (
       <Card className="p-6">
         <div className="animate-pulse">
-          <div className="h-4 bg-gray-200 rounded w-1/4 mb-4"></div>
+          <div className="h-4 bg-muted rounded w-1/4 mb-4"></div>
           <div className="space-y-3">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-16 bg-gray-200 rounded"></div>
+              <div key={i} className="h-16 bg-muted rounded"></div>
             ))}
           </div>
         </div>
@@ -129,7 +129,7 @@ const ToolMovements: React.FC<ToolMovementsProps> = ({ tool }) => {
 
         {/* Add Movement Form */}
         {showAddForm && (
-          <div className="mb-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
+          <div className="mb-6 p-4 border border-border rounded-lg bg-muted">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Add New Movement</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
