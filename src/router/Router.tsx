@@ -1,14 +1,13 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { useSelector } from "react-redux";
 import * as routes from "../constants/routes";
 import { Lazy } from "../components/base";
 import { AppLayout } from "layouts";
 import routeItems from "./routes";
+import { isAuthenticated } from "store/auth/selector";
 
 export const ClientRouter: React.FC = () => {
-  // const isAuthorized = useSelector(useAuthorized);
-  const isAuthorized = true;
-
-  // const permission = useSelector(usePermission) || [];
+  const isAuthorized = useSelector(isAuthenticated);
 
   const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
     children,
@@ -23,6 +22,7 @@ export const ClientRouter: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path={routes.LOGIN} element={<Lazy page="Login" />} />
+        <Route path={routes.REGISTER} element={<Lazy page="Register" />} />
         <Route
           path="/"
           element={
@@ -32,7 +32,7 @@ export const ClientRouter: React.FC = () => {
           }
         >
           {routeItems.map((route, key) => {
-            const isPermission = true;
+            const isPermission = true; // You can add permission checking here later
 
             return (
               <Route
