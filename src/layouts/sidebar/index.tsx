@@ -7,7 +7,17 @@ import {
   FileText,
   Settings,
   LogOut,
+  LayoutDashboard,
+  Package,
+  TrendingUp,
+  Users,
 } from "lucide-react";
+import {
+  PROCUREMENT_DASHBOARD,
+  PROCUREMENT_TOOLS,
+  PROCUREMENT_REPORTS,
+  PROCUREMENT_SUPPLIERS,
+} from "../../constants/routes";
 
 export const SideBar = () => {
   const location = useLocation();
@@ -20,6 +30,14 @@ export const SideBar = () => {
     { icon: CheckSquare, label: "Compliance", href: "#" },
     { icon: FileText, label: "Templates", href: "#" },
     { icon: Settings, label: "Settings", href: "#" },
+  ];
+
+  // Procurement Officer menu items
+  const procurementNavItems = [
+    { icon: LayoutDashboard, label: "Dashboard", href: PROCUREMENT_DASHBOARD },
+    { icon: Package, label: "Tools", href: PROCUREMENT_TOOLS },
+    { icon: TrendingUp, label: "Reports", href: PROCUREMENT_REPORTS },
+    { icon: Users, label: "Suppliers", href: PROCUREMENT_SUPPLIERS },
   ];
 
   const isActive = (href: string) => {
@@ -38,6 +56,7 @@ export const SideBar = () => {
           <h1 className="text-xl font-bold text-foreground">Citrus65</h1>
         </div>
         <nav>
+          {/* Main Navigation */}
           <ul className="space-y-1">
             {navItems.map((item) => (
               <li key={item.label}>
@@ -55,6 +74,30 @@ export const SideBar = () => {
               </li>
             ))}
           </ul>
+
+          {/* Procurement Officer Section */}
+          <div className="mt-8">
+            <h3 className="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Procurement Officer
+            </h3>
+            <ul className="space-y-1">
+              {procurementNavItems.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.href}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                      isActive(item.href)
+                        ? "bg-active text-active-foreground font-semibold"
+                        : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                    }`}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </nav>
       </div>
       <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-indigo-50 hover:text-indigo-700">
