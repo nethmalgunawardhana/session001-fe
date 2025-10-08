@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { AuthService, LoginUserDto, AuthResponseDto } from "../../services/authService";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { login } from "../../utils/auth";
 
 export const Login: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state as any)?.from?.pathname || "/";
+
   const [formData, setFormData] = useState<LoginUserDto>({
     email: "",
     password: ""
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,11 +22,15 @@ export const Login: React.FC = () => {
     setLoading(true);
     try {
       const response: AuthResponseDto = await AuthService.login(formData);
-      localStorage.setItem("token", response.token);
-      localStorage.setItem("user", JSON.stringify(response.user));
-      window.location.href = "/";
+      
+      // Store token and user info
+      login(response.token, response.user);
+      
+      // Redirect to the page they tried to visit or dashboard
+      navigate(from, { replace: true });
     } catch (err: any) {
-      setError(err?.response?.data || err.message || "Login failed");
+      console.error("Login error:", err);
+      setError(err?.response?.data || err.message || "Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }
