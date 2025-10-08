@@ -15,6 +15,7 @@ import {
   CategoryChart,
   RecentToolsTable,
 } from "../components";
+import { getUser } from "../../../utils/auth";
 
 interface DashboardMetrics {
   totalTools: number;
@@ -32,6 +33,21 @@ export const ProcurementOfficerDashboard: React.FC = () => {
   });
   const [activeTab, setActiveTab] = useState("overview");
   const [loading, setLoading] = useState(true);
+  const currentUser = getUser();
+
+  // Roles that should NOT see the tabs
+  const rolesWithoutTabs = [
+    "Procurement Officer",
+    "Warehouse Clerk",
+    "Quality Inspector",
+    "Project Manager",
+    "Technician",
+    "Billing Clerk",
+    "Inventory Manager"
+  ];
+
+  // Check if current user should see tabs
+  const shouldShowTabs = !currentUser?.role || currentUser?.role === "Admin" || !rolesWithoutTabs.includes(currentUser?.role);
 
   useEffect(() => {
     fetchDashboardData();
@@ -89,24 +105,26 @@ export const ProcurementOfficerDashboard: React.FC = () => {
           </p>
         </div>
 
-        {/* Tabs */}
-        <div className="px-6">
-          <div className="flex gap-6 border-b border-border">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`pb-3 px-1 border-b-2 transition-colors ${
-                  activeTab === tab.id
-                    ? "border-blue-600 text-blue-600 font-medium"
-                    : "border-transparent text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+        {/* Tabs - Only show for Admin users */}
+        {shouldShowTabs && (
+          <div className="px-6">
+            <div className="flex gap-6 border-b border-border">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`pb-3 px-1 border-b-2 transition-colors ${
+                    activeTab === tab.id
+                      ? "border-blue-600 text-blue-600 font-medium"
+                      : "border-transparent text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Main Content */}
