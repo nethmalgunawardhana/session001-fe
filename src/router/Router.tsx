@@ -4,22 +4,23 @@ import { Lazy } from "../components/base";
 import { AppLayout } from "layouts";
 import routeItems from "./routes";
 
-export const ClientRouter: React.FC = () => {
-  // Authentication bypassed - always authorized for dashboard access
-  const isAuthorized = true;
+function isAuthenticated() {
+  return !!localStorage.getItem("token");
+}
 
-  const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
-    children,
-  }) => {
-    // Always allow access since we're bypassing authentication
+export const ClientRouter: React.FC = () => {
+  const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    if (!isAuthenticated()) {
+      return <Navigate to={routes.LOGIN} replace />;
+    }
     return <>{children}</>;
   };
 
   return (
     <BrowserRouter>
       <Routes>
-        {/* Redirect login to dashboard */}
-        <Route path={routes.LOGIN} element={<Navigate to={routes.DASHBOARD} replace />} />
+        <Route path={routes.LOGIN} element={<Lazy page="Login" />} />
+        <Route path="/register" element={<Lazy page="Register" />} />
         <Route
           path="/"
           element={
@@ -29,27 +30,17 @@ export const ClientRouter: React.FC = () => {
           }
         >
           {routeItems.map((route, key) => {
-            const isPermission = true;
-
+            // Add role/permission checks here if needed
             return (
               <Route
                 path={route?.path}
                 index
                 key={key}
-                element={
-                  isPermission ? (
-                    route?.component ? (
-                      <Lazy page={route.component} />
-                    ) : null
-                  ) : (
-                    <Lazy page="UnAuthorized" />
-                  )
-                }
+                element={route?.component ? <Lazy page={route.component} /> : null}
               />
             );
           })}
         </Route>
-        {/* Redirect any unknown routes to dashboard */}
         <Route path="*" element={<Navigate to={routes.DASHBOARD} replace />} />
       </Routes>
     </BrowserRouter>
