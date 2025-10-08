@@ -5,24 +5,21 @@ import { AppLayout } from "layouts";
 import routeItems from "./routes";
 
 export const ClientRouter: React.FC = () => {
-  // const isAuthorized = useSelector(useAuthorized);
+  // Authentication bypassed - always authorized for dashboard access
   const isAuthorized = true;
-
-  // const permission = useSelector(usePermission) || [];
 
   const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({
     children,
   }) => {
-    if (!isAuthorized) {
-      return <Navigate to={routes.LOGIN} replace />;
-    }
+    // Always allow access since we're bypassing authentication
     return <>{children}</>;
   };
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={routes.LOGIN} element={<Lazy page="Login" />} />
+        {/* Redirect login to dashboard */}
+        <Route path={routes.LOGIN} element={<Navigate to={routes.DASHBOARD} replace />} />
         <Route
           path="/"
           element={
@@ -52,7 +49,8 @@ export const ClientRouter: React.FC = () => {
             );
           })}
         </Route>
-        <Route path="*" element={<Lazy page="NotFound" />} />
+        {/* Redirect any unknown routes to dashboard */}
+        <Route path="*" element={<Navigate to={routes.DASHBOARD} replace />} />
       </Routes>
     </BrowserRouter>
   );

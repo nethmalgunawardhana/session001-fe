@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
-import { useLogin } from "hooks";
-import { LoginForm } from "templates/Login";
 
 export const Login: React.FC = () => {
-  const { onLogin } = useLogin();
-
   useEffect(() => {
     localStorage.clear();
+    // Auto-redirect to dashboard since we don't need login
+    window.location.href = "/";
   }, []);
 
   return (
-    <div>
-      <LoginForm onSubmit={onLogin} />
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Redirecting to Dashboard...</h2>
+      </div>
     </div>
   );
 };
