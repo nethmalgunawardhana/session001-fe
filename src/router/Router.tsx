@@ -14,7 +14,7 @@ const AuthRedirect: React.FC = () => {
   useEffect(() => {
     if (isAuthenticated()) {
       // If already logged in and trying to access login/register, redirect to dashboard
-      navigate(routes.DASHBOARD, { replace: true });
+      navigate(routes.TOOLS_DASHBOARD, { replace: true });
     }
   }, [navigate, location]);
 
@@ -37,9 +37,9 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   if (isAuthenticated()) {
     // Already logged in, redirect to dashboard
-    return <Navigate to={routes.DASHBOARD} replace />;
+    return <Navigate to={routes.TOOLS_DASHBOARD} replace />;
   }
-  
+
   return <>{children}</>;
 };
 
@@ -79,7 +79,7 @@ export const ClientRouter: React.FC = () => {
             return (
               <Route
                 path={route?.path}
-                index={route?.path === routes.DASHBOARD}
+                index={route?.path === routes.TOOLS_DASHBOARD}
                 key={key}
                 element={route?.component ? <Lazy page={route.component} /> : null}
               />
@@ -88,13 +88,13 @@ export const ClientRouter: React.FC = () => {
         </Route>
 
         {/* Catch all - redirect to dashboard if authenticated, otherwise to login */}
-        <Route 
-          path="*" 
+        <Route
+          path="*"
           element={
-            isAuthenticated() ? 
-              <Navigate to={routes.DASHBOARD} replace /> : 
+            isAuthenticated() ?
+              <Navigate to={routes.TOOLS_DASHBOARD} replace /> :
               <Navigate to={routes.LOGIN} replace />
-          } 
+          }
         />
       </Routes>
     </BrowserRouter>
