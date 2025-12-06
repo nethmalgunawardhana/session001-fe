@@ -8,6 +8,10 @@ const auth = (state: RootState) => {
   return state.auth.auth;
 };
 
+const authState = (state: RootState) => {
+  return state.auth;
+};
+
 export const accessToken = createDraftSafeSelector(
   auth,
   (state) => state?.token
@@ -15,13 +19,22 @@ export const accessToken = createDraftSafeSelector(
 
 export const user = createDraftSafeSelector(auth, (state) => state?.user);
 
-export const tokenType = createDraftSafeSelector(auth, (state) => 'Bearer');
+export const tokenType = createDraftSafeSelector(authState, (state) => state.tokenType || 'Bearer');
 
 export const tokenExpiresIn = createDraftSafeSelector(accessToken, (token) =>
   token ? jwtDecode<IAccessToken>(token).exp : null
 );
-export const userId = createDraftSafeSelector(accessToken, (token) =>
-  token ? jwtDecode<IAccessToken>(token).exp : null
+
+export const userId = createDraftSafeSelector(user, (userObj) =>
+  userObj ? userObj.userID : null
+);
+
+export const userRole = createDraftSafeSelector(user, (userObj) =>
+  userObj ? userObj.role : null
+);
+
+export const userRoleId = createDraftSafeSelector(user, (userObj) =>
+  userObj ? userObj.roleId : null
 );
 
 export const accessTokenWithType = createDraftSafeSelector(
@@ -38,6 +51,19 @@ export const isAuthorized = createDraftSafeSelector(
   (valid, userObj) => valid && userObj?.username !== undefined
 );
 
+export const isAuthenticated = createDraftSafeSelector(
+  authState,
+  (state) => state.isAuthenticated
+);
+
+// For backward compatibility - returns user role as permission
 export const permission = (state: RootState) => {
-  return state?.auth?.permission?.userRoles?.[0]?.rolePermissions;
+  const userObj = state?.auth?.auth?.user;
+  if (!userObj) return null;
+  
+  // Return role information in a compatible format
+  return {
+    role: userObj.role,
+    roleId: userObj.roleId,
+  };
 };

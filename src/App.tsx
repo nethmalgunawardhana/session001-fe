@@ -1,15 +1,22 @@
 import { Provider } from "react-redux";
+import { useEffect } from "react";
 import { ClientRouter } from "./router/Router";
 import store from "store/store";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "components/shared";
+import { loadAuthFromStorage } from "store/auth/authSlice";
 
 function App() {
+  useEffect(() => {
+    // Load authentication from localStorage on app startup
+    store.dispatch(loadAuthFromStorage());
+  }, []);
+
   return (
     <Provider store={store}>
       <ThemeProvider
         attribute="class"
-        defaultTheme="dark"
+        defaultTheme="light"
         enableSystem
         disableTransitionOnChange
       >

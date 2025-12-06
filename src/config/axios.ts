@@ -1,11 +1,9 @@
 import axios from 'axios';
-import { accessTokenWithType } from 'store/auth/selector';
 import { apiURL } from './urls';
 import { getToken, logout } from '../utils/auth';
 
 export const axiosInstance = axios.create({
   baseURL: apiURL,
-
   headers: {
     'Content-Type': 'application/json',
     Accept: '*/*',
@@ -41,18 +39,31 @@ axiosInstance.interceptors.response.use(
 export function createAxios({ getState }: { getState: any }) {
   axiosInstance.interceptors.request.use(
     (config: any) => {
-      const { useAuth, ...headers } = config.headers;
-
-      const state = getState();
-      const stateToken = accessTokenWithType(state);
-      const localToken = getToken();
+      const token = localStorage.getItem('token');
       
-      // Use token from state if available, otherwise use from localStorage
-      headers.Authorization = stateToken || (localToken ? `Bearer ${localToken}` : '');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
 
-      return { ...config, headers };
+      return config;
     },
     (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  // Add response interceptor for handling 401 errors
+  axiosInstance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401) {
+        // Clear auth data and redirect to login
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
+      }
       return Promise.reject(error);
     }
   );

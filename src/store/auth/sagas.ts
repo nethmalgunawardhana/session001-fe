@@ -1,65 +1,78 @@
 import { takeLatest, put, call } from "redux-saga/effects";
-import { axiosInstance, apiURL } from "config";
+import { axiosInstance } from "config";
 import toast from "react-hot-toast";
 
 import {
   loginRequested,
   loginSuccess,
   loginFailure,
-  loadUserPermissionFailure,
-  loadUserPermissionRequested,
-  loadUserPermissionSuccess,
+  registerRequested,
+  registerSuccess,
+  registerFailure,
 } from "./authSlice";
+import { IAuthResponse } from "./types";
 
-function* loginEffect(action: {
-  type: string;
-  payload: any;
-}): Generator<any, void, any> {
+function* loginEffect(action: ReturnType<typeof loginRequested>): Generator<any, void, any> {
   try {
     const { data } = yield call(
       axiosInstance.post,
-      `${apiURL}/login`,
+      `/auth/login`,
       action.payload
     );
 
-    if (data?.status) {
-      yield put(loginSuccess(data));
-      yield call(loadUserPermissionEffect, {
-        payload: { id: data?.user.id },
-        type: "",
-      });
-
-      toast.success("Login succeessfully");
-      window.location.href = "./";
+    if (data && data.token) {
+      yield put(loginSuccess(data as IAuthResponse));
+      toast.success("Login successful!");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 500);
     } else {
-      if (data?.errors) {
-        toast.error(data?.errors[0]);
-      } else {
-        toast.error("Login Failed");
-      }
+      const errorMessage = data?.message || "Login failed";
+      toast.error(errorMessage);
+      yield put(loginFailure(errorMessage));
     }
   } catch (error: any) {
-    yield put(loginFailure(error.message));
+    const errorMessage = 
+      error?.response?.data?.message || 
+      error?.response?.data?.error ||
+      error.message || 
+      "Login failed. Please check your credentials.";
+    toast.error(errorMessage);
+    yield put(loginFailure(errorMessage));
   }
 }
 
-export function* loadUserPermissionEffect(action: {
-  type: string;
-  payload: any;
-}): Generator<any, void, any> {
+function* registerEffect(action: ReturnType<typeof registerRequested>): Generator<any, void, any> {
   try {
     const { data } = yield call(
-      axiosInstance.get,
-      `${apiURL}/get-role-permission-by-userid?Id=${action.payload.id}`
+      axiosInstance.post,
+      `/auth/register`,
+      action.payload
     );
 
-    yield put(loadUserPermissionSuccess(data));
+    if (data && data.token) {
+      yield put(registerSuccess(data as IAuthResponse));
+      toast.success("Registration successful!");
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 500);
+    } else {
+      const errorMessage = data?.message || "Registration failed";
+      toast.error(errorMessage);
+      yield put(registerFailure(errorMessage));
+    }
   } catch (error: any) {
-    yield put(loadUserPermissionFailure(error.message));
+    const errorMessage = 
+      error?.response?.data?.message || 
+      error?.response?.data?.error ||
+      error.message || 
+      "Registration failed. Please try again.";
+    toast.error(errorMessage);
+    yield put(registerFailure(errorMessage));
   }
 }
 
 export function* authSaga(): Generator<any, void, any> {
   yield takeLatest(loginRequested, loginEffect);
-  yield takeLatest(loadUserPermissionRequested, loadUserPermissionEffect);
+  yield takeLatest(registerRequested, registerEffect);
 }
