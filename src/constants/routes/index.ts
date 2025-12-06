@@ -78,7 +78,17 @@ export const PAPERS = "/masterdata/papers";
 export const BRANCHES = "/masterdata/branches";
 export const DELIVERY_FEE = "/masterdata/deliveryfees";
 
-// Procurement Officer Routes
+// Tool Inventory Routes
+export const TOOLS_DASHBOARD = "/";
+export const TOOLS_MANAGE = "/tools";
+export const TOOLS_NEW = "/tools/new";
+export const TOOLS_EDIT = "/tools/edit/:id";
+export const TOOLS_DETAILS = "/tools/:id";
+export const TOOLS_MOVEMENTS = "/movements";
+export const TOOLS_QR_SCANNER = "/qr-scanner";
+export const TOOLS_REPORTS = "/reports";
+
+// Legacy Procurement Routes (kept for compatibility)
 export const PROCUREMENT_DASHBOARD = "/procurement/dashboard";
 export const PROCUREMENT_TOOLS = "/procurement/tools";
 export const PROCUREMENT_TOOLS_NEW = "/procurement/tools/new";
