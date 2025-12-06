@@ -21,6 +21,13 @@ const ToolList: React.FC<ToolListProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [searchFilters, setSearchFilters] = useState<ToolSearchParams>(searchParams);
 
+  // Update tools when initialTools prop changes (when parent refetches)
+  useEffect(() => {
+    if (initialTools) {
+      setTools(initialTools);
+    }
+  }, [initialTools]);
+
   const fetchTools = useCallback(async () => {
     try {
       setLoading(true);

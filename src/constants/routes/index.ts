@@ -77,3 +77,11 @@ export const ROUNDS = "/masterdata/rounds";
 export const PAPERS = "/masterdata/papers";
 export const BRANCHES = "/masterdata/branches";
 export const DELIVERY_FEE = "/masterdata/deliveryfees";
+
+// Procurement Officer Routes
+export const PROCUREMENT_DASHBOARD = "/procurement/dashboard";
+export const PROCUREMENT_TOOLS = "/procurement/tools";
+export const PROCUREMENT_TOOLS_NEW = "/procurement/tools/new";
+export const PROCUREMENT_TOOLS_DETAILS = "/procurement/tools/:id";
+export const PROCUREMENT_REPORTS = "/procurement/reports";
+export const PROCUREMENT_SUPPLIERS = "/procurement/suppliers";
