@@ -7,11 +7,23 @@ import {
   FileText,
   Settings,
   LogOut,
+  LayoutDashboard,
+  Package,
+  TrendingUp,
+  Users,
 } from "lucide-react";
+import {
+  PROCUREMENT_DASHBOARD,
+  PROCUREMENT_TOOLS,
+  PROCUREMENT_REPORTS,
+  PROCUREMENT_SUPPLIERS,
+} from "../../constants/routes";
+import { getUser } from "../../utils/auth";
 
 export const SideBar = () => {
   const location = useLocation();
   const pathname = location.pathname;
+  const currentUser = getUser();
 
   const navItems = [
     { icon: GitFork, label: "Complex Agents", href: "/complex-agents" },
@@ -21,6 +33,28 @@ export const SideBar = () => {
     { icon: FileText, label: "Templates", href: "#" },
     { icon: Settings, label: "Settings", href: "#" },
   ];
+
+  // Procurement Officer menu items
+  const procurementNavItems = [
+    { icon: LayoutDashboard, label: "Dashboard", href: PROCUREMENT_DASHBOARD },
+    { icon: Package, label: "Tools", href: PROCUREMENT_TOOLS },
+    { icon: TrendingUp, label: "Reports", href: PROCUREMENT_REPORTS },
+    { icon: Users, label: "Suppliers", href: PROCUREMENT_SUPPLIERS },
+  ];
+
+  // Roles that should NOT see the top navigation items (Complex Agents, Deployments, etc.)
+  const rolesWithoutTopNav = [
+    "Procurement Officer",
+    "Warehouse Clerk",
+    "Quality Inspector",
+    "Project Manager",
+    "Technician",
+    "Billing Clerk",
+    "Inventory Manager"
+  ];
+
+  // Check if current user should see top navigation
+  const shouldShowTopNav = !currentUser?.role || currentUser?.role === "Admin" || !rolesWithoutTopNav.includes(currentUser?.role);
 
   const isActive = (href: string) => {
     if (href === "/complex-agents") {
@@ -38,23 +72,50 @@ export const SideBar = () => {
           <h1 className="text-xl font-bold text-foreground">Citrus65</h1>
         </div>
         <nav>
-          <ul className="space-y-1">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                <Link
-                  to={item.href}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                    isActive(item.href)
-                      ? "bg-active text-active-foreground font-semibold"
-                      : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
-                  }`}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {/* Main Navigation - Only show for Admin or roles not in the exclusion list */}
+          {shouldShowTopNav && (
+            <ul className="space-y-1">
+              {navItems.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.href}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                      isActive(item.href)
+                        ? "bg-active text-active-foreground font-semibold"
+                        : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                    }`}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Procurement Officer Section */}
+          <div className={shouldShowTopNav ? "mt-8" : ""}>
+            <h3 className="px-3 mb-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+              Procurement Officer
+            </h3>
+            <ul className="space-y-1">
+              {procurementNavItems.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.href}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                      isActive(item.href)
+                        ? "bg-active text-active-foreground font-semibold"
+                        : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
+                    }`}
+                  >
+                    <item.icon className="h-5 w-5" />
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
         </nav>
       </div>
       <button className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-500 hover:bg-indigo-50 hover:text-indigo-700">
